@@ -1,4 +1,5 @@
-# Kingsland University Graduation Project #1, Creating a Decentralized App
+# Kingsland University Graduation Project #1
+## Creating a Decentralized App
 
 This project is about creating a decentalized exchange platform.I used Solidity to create smart contracts, javascriptand node.js for testingand building the website and react.js library for the front-end. I used Hardhat IDE for development.
 
