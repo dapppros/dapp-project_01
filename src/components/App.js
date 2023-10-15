@@ -17,7 +17,7 @@ function App() {
     console.log(chainId)
 
     // Token Smart Contract
-    const token = new ethers.Contract(config[chainId].DApp.address, TOKEN_ABI, provider)
+    const token = new ethers.Contract(config[chainId].ASH.address, TOKEN_ABI, provider)
     console.log(token.address)
     const symbol = await token.symbol()
     console.log(symbol)
