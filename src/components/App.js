@@ -7,70 +7,62 @@ import {
   loadNetwork,
   loadAccount,
   loadTokens,
-  loadExchange
+  loadExchange,
+  subscribeToEvents
 } from '../store/interactions';
 
-import Navbar from './Navbar';
-import Markets from './Markets';
+import Navbar from './Navbar'
+import Markets from './Markets'
+import Balance from './Balance'
 
 function App() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
   const loadBlockchainData = async () => {
-    try {
-      // Connect Ethers to blockchain
-      const provider = loadProvider(dispatch);
+    // Connect Ethers to blockchain
+    const provider = loadProvider(dispatch)
 
-      // Get the current chain ID
-      const chainId = await loadNetwork(provider, dispatch);
-     // console.log('Current Chain ID:', chainId); // Print the current chain ID
+    // Fetch current network's chainId (e.g. hardhat: 31337, kovan: 42)
+    const chainId = await loadNetwork(provider, dispatch)
 
-      // Fetch current account & balance from Metamask
-      await loadAccount(provider, dispatch);
+    // Reload page when network changes
+    window.ethereum.on('chainChanged', () => {
+      window.location.reload()
+    })
 
-      // Check if 'ASH' and 'ISA' properties exist for the current chainId
-      if (config[chainId] && config[chainId].ASH && config[chainId].ISA) {
-        const ASH = config[chainId].ASH;
-        const ISA = config[chainId].ISA;
+    // Fetch current account & balance from Metamask when changed
+    window.ethereum.on('accountsChanged', () => {
+      loadAccount(provider, dispatch)
+    })
 
-        // Load token smart contracts
-        await loadTokens(provider, [ASH.address, ISA.address], dispatch);
-      } else {
-        console.error('ASH or ISA properties not found in config for chainId:', chainId);
-        // Handle the error or provide default values for ASH and ISA as needed
-      }
+    // Load token smart contracts
+    const   ASH  = config[chainId].ASH
+    const ISA = config[chainId].ISA
+    await loadTokens(provider, [ASH.address, ISA.address], dispatch)
 
-      // Check if 'exchange' property exists for the current chainId
-      if (config[chainId] && config[chainId].exchange) {
-        const exchangeConfig = config[chainId].exchange;
+    // Load exchange smart contract
+    const exchangeConfig = config[chainId].exchange
+    const exchange = await loadExchange(provider, exchangeConfig.address, dispatch)
 
-        // Load exchange smart contract
-        await loadExchange(provider, exchangeConfig.address, dispatch);
-      } else {
-        console.error('exchange property not found in config for chainId:', chainId);
-        // Handle the error or provide default values for exchangeConfig as needed
-      }
-    } catch (error) {
-      console.error('Error loading blockchain data:', error);
-      // You can add additional error handling or dispatch Redux actions for errors here if needed
-    }
-  };
+    // Listen to events
+    subscribeToEvents(exchange, dispatch)
+  }
 
-  
   useEffect(() => {
-    loadBlockchainData();
-  });
+    loadBlockchainData()
+  })
 
   return (
     <div>
 
-<Navbar />
+      <Navbar />
+
       <main className='exchange grid'>
         <section className='exchange__section--left grid'>
 
-          <Markets/>
+          <Markets />
 
-          {/* Balance */}
+          <Balance />
 
           {/* Order */}
 
@@ -93,6 +85,5 @@ function App() {
     </div>
   );
 }
-
 
 export default App;

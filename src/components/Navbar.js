@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux'
 import Blockies from 'react-blockies'
 
-import logo from '../assets/logo.png'
+import logo from '../assets/logo.svg'
 import eth from '../assets/eth.svg'
 
 import { loadAccount } from '../store/interactions'
