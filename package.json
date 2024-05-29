@@ -52,5 +52,20 @@
     "ethereum-waffle": "^3.4.0",
     "ethers": "^5.5.4",
     "hardhat": "^2.18.1"
-  }
+  },
+  "description": "This project is about creating a decentalized exchange platform.I used Solidity to create smart contracts, javascript and node.js for testing and building the website and react.js library for the front-end part of the project. I used Hardhat IDE for development.",
+  "main": "hardhat.config.js",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zblockdoc/dapp-project_01.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zblockdoc/dapp-project_01/issues"
+  },
+  "homepage": "https://github.com/zblockdoc/dapp-project_01#readme"
 }
